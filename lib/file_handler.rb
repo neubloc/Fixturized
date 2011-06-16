@@ -2,7 +2,7 @@ module Fixturized::FileHandler
   # All filesystem operations are handled here
 
   def fixture_dir
-    "#{RAILS_ROOT}/fixturized"
+    "#{::Rails.root}/fixturized"
   end
 
   def create_fixture_dir
