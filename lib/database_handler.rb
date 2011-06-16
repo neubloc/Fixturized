@@ -72,8 +72,9 @@ module Fixturized::DatabaseHandler
         unless fixtures.to_a.empty?
           klass = tbl.classify.constantize
           ActiveRecord::Base.transaction do 
-            statement =  "INSERT INTO #{tbl} (#{fixtures.first.keys.collect{|k| "`#{k}`"}.join(",")}) " + fixtures.collect do |fixture|
-              "(SELECT #{fixture.values.collect { |value| ActiveRecord::Base.connection.quote(value) }.join(', ')})"
+            statement =  "INSERT INTO #{tbl} (#{fixtures.first.keys.collect{|k| "`#{k}`"}.join(",")}) "
+            statement += fixtures.collect do |fixture|
+              "SELECT #{fixture.values.collect { |value| ActiveRecord::Base.connection.quote(value) }.join(', ')}"
             end.join(" UNION ")
             ActiveRecord::Base.connection.execute statement, 'Fixture Insert'
           end
